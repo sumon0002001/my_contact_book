@@ -1,19 +1,16 @@
-import Heading from "@/components/Heading";
+import HeadingText from "@/components/Heading";
 import Navbar from "@/components/Navbar";
-import React from "react";
+import { deleteContact } from "@/lib/action";
 import { getContacts } from "@/lib/data";
-import { FiTrash, FiEdit } from "react-icons/fi";
 import Link from "next/link";
+import React from "react";
+import { FiTrash, FiEdit } from "react-icons/fi";
 
-const page = async () => {
+const HomePage = async () => {
   const contacts = await getContacts();
-
   return (
     <main>
-      <Heading
-        title="My Contact Book"
-        description="All contacts are given below with details"
-      />
+      <HeadingText title="Contact Book" description="All Contacts Below" />
       <Navbar />
       <div className="flex flex-col px-4 py-4">
         <div>
@@ -21,19 +18,19 @@ const page = async () => {
             <thead>
               <tr>
                 <th className="px-4 py-3 title-font text-center tracking-wider font-medium text-gray-700 text-sm bg-gray-100 rounded-tl rounded-bl">
-                  First Name
+                  FirstName
                 </th>
-                <th className="px-4 py-3 title-font text-center tracking-wider font-medium text-gray-700 text-sm bg-gray-100 rounded-tl rounded-bl">
-                  Last Name
+                <th className="px-4 py-3 title-font text-center tracking-wider font-medium text-gray-700 text-sm bg-gray-100">
+                  LastName
                 </th>
-                <th className="px-4 py-3 title-font text-center tracking-wider font-medium text-gray-700 text-sm bg-gray-100 rounded-tl rounded-bl">
+                <th className="px-4 py-3 title-font text-center tracking-wider font-medium text-gray-700 text-sm bg-gray-100">
                   Email
                 </th>
-                <th className="px-4 py-3 title-font text-center tracking-wider font-medium text-gray-700 text-sm bg-gray-100 rounded-tl rounded-bl">
-                  Contact
+                <th className="px-4 py-3 title-font text-center tracking-wider font-medium text-gray-700 text-sm bg-gray-100">
+                  Contact #
                 </th>
-                <th className="px-4 py-3 title-font text-center tracking-wider font-medium text-gray-700 text-sm bg-gray-100 rounded-tl rounded-bl">
-                  Actions
+                <th className="px-4 py-3 title-font text-center tracking-wider font-medium text-gray-700 text-sm bg-gray-100">
+                  Action
                 </th>
               </tr>
             </thead>
@@ -53,12 +50,15 @@ const page = async () => {
                     {contact.phone}
                   </td>
                   <td className="border-t-2 text-center border-gray-200 px-4 py-3 flex items-center gap-1">
-                    <Link href={`contact/${contact.id}`>
+                    <Link href={`contact/${contact.id}`}>
                       <FiEdit />
                     </Link>
-                    <Link href={"/delete"}>
-                      <FiTrash />
-                    </Link>
+                    <form action={deleteContact}>
+                      <input hidden name="id" value={contact.id} />
+                      <button type="submit" className="mt-2">
+                        <FiTrash style={{ color: "red" }} />
+                      </button>
+                    </form>
                   </td>
                 </tr>
               ))}
@@ -70,4 +70,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default HomePage;
